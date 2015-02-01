@@ -1,11 +1,11 @@
 PODS:
   - AFNetworking (2.2.1):
-    - AFNetworking/NSURLConnection
-    - AFNetworking/NSURLSession
-    - AFNetworking/Reachability
-    - AFNetworking/Security
-    - AFNetworking/Serialization
-    - AFNetworking/UIKit
+    - AFNetworking/NSURLConnection (= 2.2.1)
+    - AFNetworking/NSURLSession (= 2.2.1)
+    - AFNetworking/Reachability (= 2.2.1)
+    - AFNetworking/Security (= 2.2.1)
+    - AFNetworking/Serialization (= 2.2.1)
+    - AFNetworking/UIKit (= 2.2.1)
   - AFNetworking/NSURLConnection (2.2.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
@@ -27,7 +27,7 @@ DEPENDENCIES:
   - BDBOAuth1Manager
 
 SPEC CHECKSUMS:
-  AFNetworking: 0121f4b69be3fa58d1ab317866e036e12ac9651d
-  BDBOAuth1Manager: 25d18d56820695aa18aae44eecad55829274a290
+  AFNetworking: d807f014afb2003f135715f7cc293407b36653dd
+  BDBOAuth1Manager: 333ba2288c2b33b5fbbc4bc9e84aeb26e99741a4
 
-COCOAPODS: 0.29.0
+COCOAPODS: 0.35.0
