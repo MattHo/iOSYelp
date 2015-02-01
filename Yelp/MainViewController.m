@@ -17,7 +17,7 @@ NSString * const kYelpConsumerSecret = @"33QCvh5bIF5jIHR5klQr7RtBDhQ";
 NSString * const kYelpToken = @"uRcRswHFYa1VkDrGV6LAW2F8clGh5JHV";
 NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 
-@interface MainViewController () <UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate>
+@interface MainViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, FiltersViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) YelpClient *client;
@@ -51,7 +51,10 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(onFilterButton)];
-    self.title = @"Yelp";
+    
+    UISearchBar *searchBar = [[UISearchBar alloc] init];
+    searchBar.delegate = self;
+    self.navigationItem.titleView = searchBar;
 }
 
 - (void)didReceiveMemoryWarning
@@ -70,14 +73,21 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     return cell;
 }
 
-#pragma Filter delegate methods
+#pragma mark - UISearchBarDelegate Methods
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [searchBar.viewForBaselineLayout endEditing:YES];
+    [self fetchBusinessWithQuery:searchBar.text params:nil];
+}
+
+#pragma mark - Filter delegate methods
 
 - (void)filtersViewController:(FiltersViewController *)filtersViewController didChangeFilters:(NSDictionary *)filters {
     [self fetchBusinessWithQuery:@"Restaurants" params:filters];
     NSLog(@"fire new network event: %@", filters);
 }
 
-#pragma makr - Private methods
+#pragma mark - Private methods
 - (void)fetchBusinessWithQuery:(NSString *)query params:(NSDictionary *)params {
     [self.client searchWithTerm:query params:params success:^(AFHTTPRequestOperation *operation, id response) {
         NSArray *businessDictionaries = response[@"businesses"];
