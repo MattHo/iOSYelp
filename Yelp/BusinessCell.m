@@ -46,6 +46,7 @@
     self.distanceLabel.text = [NSString stringWithFormat:@"%.2f mi", self.business.distance];
     self.nameLabel.text = self.business.name;
     self.addressLabel.text = self.business.address;
+    self.categoryLabel.text = self.business.categories;
 }
 
 - (void)layoutSubviews {
