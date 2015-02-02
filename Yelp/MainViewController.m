@@ -122,8 +122,10 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 #pragma mark - Filter delegate methods
 
 - (void)filtersViewController:(FiltersViewController *)filtersViewController didChangeFilters:(NSDictionary *)filters {
-    self.filters = filters;
+    [self.filters removeAllObjects];
+    [self.filters setValuesForKeysWithDictionary:filters];
     [self fetchBusinessWithQuery:self.searchBar.text params:filters];
+    [self.businesses removeAllObjects];
     NSLog(@"fire new network event: %@", filters);
 }
 
