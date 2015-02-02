@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "VBFPopFlatButton.h"
 
 @class ButtonCell;
 

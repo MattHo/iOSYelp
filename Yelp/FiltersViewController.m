@@ -9,7 +9,6 @@
 #import "FiltersViewController.h"
 #import "ButtonCell.h"
 #import "SwitchCell.h"
-#import "VBFPopFlatButton.h"
 
 @interface FiltersViewController () <UITableViewDataSource, UITableViewDelegate, SwitchCellDelegate>
 

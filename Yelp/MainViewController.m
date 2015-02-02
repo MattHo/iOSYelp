@@ -21,8 +21,11 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) YelpClient *client;
-@property (nonatomic, strong) NSArray *businesses;
+@property (nonatomic, strong) NSMutableArray *businesses;
 @property (nonatomic, strong) BusinessCell *prototypeCell;
+@property (nonatomic, strong) NSMutableDictionary *filters;
+@property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) NSNumber *offset;
 
 - (void)fetchBusinessWithQuery:(NSString *)query params:(NSDictionary *)params;
 
@@ -60,6 +63,19 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     UISearchBar *searchBar = [[UISearchBar alloc] init];
     searchBar.delegate = self;
     self.navigationItem.titleView = searchBar;
+    self.searchBar = searchBar;
+    
+    UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+    UIActivityIndicatorView *loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [loadingView startAnimating];
+    loadingView.center = tableFooterView.center;
+    [tableFooterView addSubview:loadingView];
+    self.tableView.tableFooterView = tableFooterView;
+    self.tableView.tableFooterView.hidden = YES;
+    
+    self.filters = [NSMutableDictionary dictionary];
+    self.businesses = [NSMutableArray array];
+    self.offset = 0;
 }
 
 - (void)didReceiveMemoryWarning
@@ -76,6 +92,15 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     BusinessCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BusinessCell"];
     cell.business = self.businesses[indexPath.row];
     [cell setLayoutMargins:UIEdgeInsetsZero];
+    
+    if (indexPath.row == self.businesses.count - 1 && [self.offset integerValue] < self.businesses.count &&
+        [self.offset integerValue] < 100) {
+        self.tableView.tableFooterView.hidden = NO;
+        self.offset = [NSNumber numberWithLong:self.businesses.count];
+        [self.filters setValue:self.offset forKey:@"offset"];
+        [self fetchBusinessWithQuery:self.searchBar.text params:self.filters];
+    }
+    
     return cell;
 }
 
@@ -97,7 +122,8 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 #pragma mark - Filter delegate methods
 
 - (void)filtersViewController:(FiltersViewController *)filtersViewController didChangeFilters:(NSDictionary *)filters {
-    [self fetchBusinessWithQuery:@"Restaurants" params:filters];
+    self.filters = filters;
+    [self fetchBusinessWithQuery:self.searchBar.text params:filters];
     NSLog(@"fire new network event: %@", filters);
 }
 
@@ -105,9 +131,10 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 - (void)fetchBusinessWithQuery:(NSString *)query params:(NSDictionary *)params {
     [self.client searchWithTerm:query params:params success:^(AFHTTPRequestOperation *operation, id response) {
         NSArray *businessDictionaries = response[@"businesses"];
+        NSLog(@"%@", businessDictionaries);
         
-        self.businesses = [Business businessWithDictionaries:businessDictionaries];
-        
+        self.tableView.tableFooterView.hidden = YES;
+        [self.businesses addObjectsFromArray:[Business businessWithDictionaries:businessDictionaries]];
         [self.tableView reloadData];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
