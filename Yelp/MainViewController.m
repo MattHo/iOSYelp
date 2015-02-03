@@ -5,7 +5,7 @@
 //  Created by Timothy Lee on 3/21/14.
 //  Copyright (c) 2014 codepath. All rights reserved.
 //
-
+#import <MapKit/MapKit.h>
 #import "MainViewController.h"
 #import "FiltersViewController.h"
 #import "YelpClient.h"
@@ -20,6 +20,7 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 @interface MainViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, FiltersViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (nonatomic, strong) YelpClient *client;
 @property (nonatomic, strong) NSMutableArray *businesses;
 @property (nonatomic, strong) BusinessCell *prototypeCell;
@@ -62,6 +63,7 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 
     UISearchBar *searchBar = [[UISearchBar alloc] init];
     searchBar.delegate = self;
+    searchBar.placeholder = @"search restaurant";
     self.navigationItem.titleView = searchBar;
     self.searchBar = searchBar;
     
@@ -126,14 +128,12 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     [self.filters setValuesForKeysWithDictionary:filters];
     [self fetchBusinessWithQuery:self.searchBar.text params:filters];
     [self.businesses removeAllObjects];
-    NSLog(@"fire new network event: %@", filters);
 }
 
 #pragma mark - Private methods
 - (void)fetchBusinessWithQuery:(NSString *)query params:(NSDictionary *)params {
     [self.client searchWithTerm:query params:params success:^(AFHTTPRequestOperation *operation, id response) {
         NSArray *businessDictionaries = response[@"businesses"];
-        NSLog(@"%@", businessDictionaries);
         
         self.tableView.tableFooterView.hidden = YES;
         [self.businesses addObjectsFromArray:[Business businessWithDictionaries:businessDictionaries]];
@@ -152,12 +152,38 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     [self presentViewController:nvc animated:YES completion:nil];
 }
 
-- (void)onMapButton {
-    FiltersViewController *vc = [[FiltersViewController alloc] init];
-    vc.delegate = self;
+- (void)onListButton {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Map" style:UIBarButtonItemStylePlain target:self action:@selector(onMapButton)];
     
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
-    [self presentViewController:nvc animated:YES completion:nil];
+    self.tableView.hidden = NO;
+    [UIView transitionWithView:self.mapView duration:1.0f options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+        [UIView transitionWithView:self.tableView duration:1.0f options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+            self.mapView.hidden = YES;
+        } completion:nil];
+    } completion:nil];
+}
+
+- (void)onMapButton {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"List" style:UIBarButtonItemStylePlain target:self action:@selector(onListButton)];
+
+    CLLocationCoordinate2D userLocation;
+    userLocation.latitude = 37.774866;
+    userLocation.longitude = -122.394556;
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(userLocation, 3000, 3000);
+    [self.mapView setRegion:region animated:NO];
+    self.mapView.hidden = NO;
+
+    [UIView transitionWithView:self.tableView duration:1.0f options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+        [UIView transitionWithView:self.mapView duration:1.0f options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+            self.tableView.hidden = YES;
+        } completion:^(BOOL finished) {
+            for (Business *business in self.businesses) {
+                if (business.location) {
+                    [self.mapView addAnnotation:business.location];
+                }
+            }
+        }];
+    } completion:nil];
 }
 
 - (BusinessCell *) prototypeCell {

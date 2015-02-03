@@ -188,7 +188,7 @@
             NSDictionary *item = [items objectAtIndex:indexPath.row];
             self.sort = item[@"code"];
         }
-        [self.tableView reloadData];
+        [self.tableView reloadSections: [NSIndexSet indexSetWithIndex:indexPath.section]  withRowAnimation:UITableViewRowAnimationFade];
     } else if (indexPath.section == 1) {
         if ([self.editDistance isEqualToString:@"NO"]) {
             self.editDistance = @"YES";
@@ -199,13 +199,13 @@
             NSDictionary *item = [items objectAtIndex:indexPath.row];
             self.distance = item[@"code"];
         }
-        [self.tableView reloadData];
+        [self.tableView reloadSections: [NSIndexSet indexSetWithIndex:indexPath.section]  withRowAnimation:UITableViewRowAnimationFade];
     } else if (indexPath.section == 3) {
         NSArray *items = [self.showAllCategories isEqualToString:@"YES"] ? self.categories : self.mainCategories;
         
         if (indexPath.row == items.count) {
             self.showAllCategories = [self.showAllCategories isEqualToString:@"YES"] ? @"NO" : @"YES";
-            [self.tableView reloadData];
+            [self.tableView reloadSections: [NSIndexSet indexSetWithIndex:indexPath.section]  withRowAnimation:UITableViewRowAnimationNone];
         }
     }
 }
@@ -217,7 +217,7 @@
     
     if (indexPath.section == 2) {
         self.hasDeal = value ? @"YES" : @"NO";
-        [self.tableView reloadData];
+        [self.tableView reloadSections: [NSIndexSet indexSetWithIndex:indexPath.section]  withRowAnimation:UITableViewRowAnimationFade];
     } else if (indexPath.section == 3) {
         NSArray *items = [self.showAllCategories isEqualToString:@"YES"] ? self.categories : self.mainCategories;
         

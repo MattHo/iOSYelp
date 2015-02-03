@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainViewController">
             <connections>
+                <outlet property="mapView" destination="bYK-cP-b2b" id="MEj-6b-T8S"/>
                 <outlet property="tableView" destination="lXp-3R-BhU" id="5JY-6w-wyh"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -20,8 +21,20 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
+                <mapView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bYK-cP-b2b">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                </mapView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="bYK-cP-b2b" secondAttribute="trailing" id="Qsu-eE-08a"/>
+                <constraint firstAttribute="bottom" secondItem="bYK-cP-b2b" secondAttribute="bottom" id="uA2-ex-hL2"/>
+                <constraint firstItem="bYK-cP-b2b" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="uxg-0f-WkC"/>
+                <constraint firstItem="bYK-cP-b2b" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="yfd-WW-0N7"/>
+            </constraints>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <point key="canvasLocation" x="133" y="300"/>
         </view>
     </objects>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

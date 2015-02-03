@@ -7,6 +7,7 @@
 //
 
 #import "Business.h"
+#import "Location.h"
 
 @implementation Business
 
@@ -34,13 +35,25 @@
         if (neighborhood.count > 0) {
             [street addObject:neighborhood[0]];
         }
-
+        
         self.address = [street componentsJoinedByString:@", "];
+        NSString *latitude = [dictionary valueForKeyPath:@"location.coordinate.latitude"];
+        NSString *longitude = [dictionary valueForKeyPath:@"location.coordinate.longitude"];
+
+        if (latitude != nil) {
+            CLLocationCoordinate2D coordinate;
+            coordinate.latitude = [latitude floatValue];
+            coordinate.longitude = [longitude floatValue];
+            
+            self.location = [[Location alloc] initWithName:self.name address:self.address coordinate:coordinate];
+        }
         
         self.numReviews = [dictionary[@"review_count"] integerValue];
         self.ratingImageUrl = dictionary[@"rating_img_url"];
         float milesPerMeter = 0.000621371;
         self.distance = [dictionary[@"distance"] integerValue] * milesPerMeter;
+        
+        NSLog(@"%@", dictionary);
     }
     
     return self;
