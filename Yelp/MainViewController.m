@@ -128,6 +128,7 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [searchBar.viewForBaselineLayout endEditing:YES];
+    [self.businesses removeAllObjects];
     [self fetchBusinessWithQuery:searchBar.text params:nil];
 }
 
