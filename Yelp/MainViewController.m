@@ -184,8 +184,8 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     [self.mapView setRegion:region animated:NO];
     self.mapView.hidden = NO;
 
-    [UIView transitionWithView:self.tableView duration:1.0f options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-        [UIView transitionWithView:self.mapView duration:1.0f options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+    [UIView transitionWithView:self.tableView duration:1.0f options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
+        [UIView transitionWithView:self.mapView duration:1.0f options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
             self.tableView.hidden = YES;
         } completion:^(BOOL finished) {
             for (Business *business in self.businesses) {

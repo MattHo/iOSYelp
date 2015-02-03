@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *addressTableView;
+@property (weak, nonatomic) IBOutlet UIButton *commentButton;
 
 @end
 
@@ -35,6 +36,12 @@
     self.addressTableView.delegate = self;
     self.addressTableView.dataSource = self;
     [self.addressTableView registerNib:[UINib nibWithNibName:@"AddressCell" bundle:nil] forCellReuseIdentifier:@"AddressCell"];
+    
+    [self.addressTableView setSeparatorInset:UIEdgeInsetsZero];
+    [self.addressTableView setLayoutMargins:UIEdgeInsetsZero];
+
+    self.commentButton.layer.cornerRadius = 3;
+    self.commentButton.clipsToBounds = YES;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -83,6 +90,7 @@
     cell.addressLabel.text = self.business.fullAddress;
     cell.cityLabel.text = self.business.city;
     [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+    [cell setLayoutMargins:UIEdgeInsetsZero];
     return cell;
 }
 

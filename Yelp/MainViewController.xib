@@ -25,7 +25,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                 </mapView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="bYK-cP-b2b" secondAttribute="trailing" id="Qsu-eE-08a"/>
                 <constraint firstAttribute="bottom" secondItem="bYK-cP-b2b" secondAttribute="bottom" id="uA2-ex-hL2"/>
