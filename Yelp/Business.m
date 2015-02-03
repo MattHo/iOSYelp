@@ -24,6 +24,8 @@
         
         self.name = dictionary[@"name"];
         self.imageUrl = dictionary[@"image_url"];
+        self.numReviews = [dictionary[@"review_count"] integerValue];
+        self.ratingImageUrl = dictionary[@"rating_img_url"];
 
         NSMutableArray *street = [NSMutableArray array];
         NSArray *address = [dictionary valueForKeyPath:@"location.address"];
@@ -37,6 +39,13 @@
         }
         
         self.address = [street componentsJoinedByString:@", "];
+        self.city = [dictionary valueForKeyPath:@"location.city"];
+        
+        NSArray *fullAddress = [dictionary valueForKeyPath:@"location.display_address"];
+        if (fullAddress.count > 0) {
+            self.fullAddress = [fullAddress componentsJoinedByString:@", "];
+        }
+        
         NSString *latitude = [dictionary valueForKeyPath:@"location.coordinate.latitude"];
         NSString *longitude = [dictionary valueForKeyPath:@"location.coordinate.longitude"];
 
@@ -48,8 +57,6 @@
             self.location = [[Location alloc] initWithName:self.name address:self.address coordinate:coordinate];
         }
         
-        self.numReviews = [dictionary[@"review_count"] integerValue];
-        self.ratingImageUrl = dictionary[@"rating_img_url"];
         float milesPerMeter = 0.000621371;
         self.distance = [dictionary[@"distance"] integerValue] * milesPerMeter;
         

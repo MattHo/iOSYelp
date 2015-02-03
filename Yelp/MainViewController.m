@@ -8,6 +8,7 @@
 #import <MapKit/MapKit.h>
 #import "MainViewController.h"
 #import "FiltersViewController.h"
+#import "BusinessViewController.h"
 #import "YelpClient.h"
 #import "Business.h"
 #import "BusinessCell.h"
@@ -104,6 +105,15 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     }
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    BusinessViewController *vc = [[BusinessViewController alloc] init];
+    
+    vc.business = self.businesses[indexPath.row];
+    
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
